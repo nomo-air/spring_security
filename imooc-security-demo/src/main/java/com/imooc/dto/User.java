@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.util.Date;
 
 @Data
@@ -23,5 +24,6 @@ public class User {
     private String password;
 
     @JsonView(UserSimpleView.class)
+    @Past(message = "生日必须是过去时间")
     private Date birthday;
 }

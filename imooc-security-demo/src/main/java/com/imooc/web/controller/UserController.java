@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,6 +46,20 @@ public class UserController {
         }
         log.info("{}, {}, {}, {}", user.getId(), user.getUsername(), user.getPassword(), user.getBirthday());
         user.setId("1");
+        return user;
+    }
+
+    @PutMapping(value = "/{id:\\d+}")
+    public User update(@Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().forEach(error -> {
+                // 可以获取错误详细信息
+                FieldError fieldError = (FieldError) error;
+                String message = fieldError.getField() + error.getDefaultMessage();
+                log.info("{}", message);
+            });
+        }
+        log.info("{}, {}, {}, {}", user.getId(), user.getUsername(), user.getPassword(), user.getBirthday());
         return user;
     }
 
