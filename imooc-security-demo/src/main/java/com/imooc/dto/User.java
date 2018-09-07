@@ -1,6 +1,7 @@
 package com.imooc.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.imooc.validator.MyConstraint;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ public class User {
     private String id;
 
     @JsonView(UserSimpleView.class)
+    @MyConstraint
     private String username;
 
     @JsonView(UserDetailView.class)
