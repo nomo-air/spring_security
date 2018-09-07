@@ -3,6 +3,7 @@ package com.imooc.web.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.imooc.dto.User;
 import com.imooc.dto.UserQueryCondition;
+import com.imooc.exception.UserNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -34,16 +35,11 @@ public class UserController {
     @GetMapping(value = "/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable String id) {
-        User user = new User();
-        user.setUsername("tom");
-        return user;
+        throw new UserNotExistException(id);
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user, BindingResult errors) {
-        if (errors.hasErrors()) {
-            errors.getAllErrors().forEach(error -> log.info("{}", error.getDefaultMessage()));
-        }
+    public User create(@Valid @RequestBody User user) {
         log.info("{}, {}, {}, {}", user.getId(), user.getUsername(), user.getPassword(), user.getBirthday());
         user.setId("1");
         return user;
