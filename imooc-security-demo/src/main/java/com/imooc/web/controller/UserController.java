@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.imooc.dto.User;
 import com.imooc.dto.UserQueryCondition;
 import com.imooc.exception.UserNotExistException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -21,6 +23,7 @@ import java.util.List;
 public class UserController {
 
     @GetMapping
+    @ApiOperation(value = "用户查询")
     @JsonView(User.UserSimpleView.class)
     public List<User> query(UserQueryCondition condition) {
         log.info("condition is {}", ReflectionToStringBuilder.toString(condition, ToStringStyle.MULTI_LINE_STYLE));
@@ -33,8 +36,9 @@ public class UserController {
 
     // 支持正则
     @GetMapping(value = "/{id:\\d+}")
+    @ApiOperation(value = "根据id获取用户详情")
     @JsonView(User.UserDetailView.class)
-    public User getInfo(@PathVariable String id) {
+    public User getInfo(@ApiParam(value = "用户id") @PathVariable String id) {
         log.info("进入Controller，获取用户详情，用户不存在异常会被异常处理器处理，不会传到拦截器，拦截器不仅会拦截用户定义的Controller也会拦截" +
                 "spring框架本身的Controller，拦截层级关系为：Controller -> Aspect -> ControllerAdvice -> Interceptor -> Filter");
         // throw new RuntimeException();
