@@ -28,7 +28,7 @@ public class QueueListener implements ApplicationListener<ContextRefreshedEvent>
                 if (StringUtils.isNotBlank(mockQueue.getCompleteOrder())) {
 
                     String orderNumber = mockQueue.getCompleteOrder();
-                    log.info("返回订单处理结果：" + orderNumber);
+                    log.info("返回订单处理结果：{}", orderNumber);
                     deferredResultHolder.getMap().get(orderNumber).setResult("下单成功");
                     mockQueue.setCompleteOrder(null);
 

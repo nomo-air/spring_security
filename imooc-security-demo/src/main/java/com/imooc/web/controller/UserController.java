@@ -26,7 +26,7 @@ public class UserController {
     @ApiOperation(value = "用户查询")
     @JsonView(User.UserSimpleView.class)
     public List<User> query(UserQueryCondition condition) {
-        log.info("condition is {}", ReflectionToStringBuilder.toString(condition, ToStringStyle.MULTI_LINE_STYLE));
+        log.info("用户信息如下：{}", ReflectionToStringBuilder.toString(condition, ToStringStyle.MULTI_LINE_STYLE));
         List<User> users = new ArrayList<>();
         users.add(new User());
         users.add(new User());

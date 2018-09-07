@@ -19,7 +19,7 @@ public class MyConstraintValidator implements ConstraintValidator<MyConstraint, 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
         // 这里可以用注入的类来参与验证逻辑
-        log.info("{}", "执行自定义校验参数逻辑：" + value);
+        log.info("执行自定义校验参数逻辑：{}", value);
         return false;
     }
 }

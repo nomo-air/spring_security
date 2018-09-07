@@ -24,7 +24,7 @@ public class FileController {
 
     @PostMapping
     public FileInfo upload(MultipartFile file) throws Exception {
-        log.info("{}", "{}", "{}", "文件名：" + file.getName(), "源文件名：" + file.getOriginalFilename(), "文件大小：" + file.getSize());
+        log.info("文件名：{}, 源文件名：{}, 文件大小：{}", file.getName(), file.getOriginalFilename(), file.getSize());
         File localFile = new File(folder, new Date().getTime() + ".txt");
         file.transferTo(localFile);
         return new FileInfo(localFile.getAbsolutePath());
