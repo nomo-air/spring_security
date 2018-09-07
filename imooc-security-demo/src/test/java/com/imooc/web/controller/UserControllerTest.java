@@ -15,11 +15,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -74,13 +76,13 @@ public class UserControllerTest {
     public void whenGreateSuccess() throws Exception {
         Date date = new Date();
         String content = "{\"username\":\"tom\",\"password\":null,\"birthday\":"+date.getTime()+"}";
-        String reuslt = mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON_UTF8)
+        String result = mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(content))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andReturn().getResponse().getContentAsString();
 
-        log.info("{}", reuslt);
+        log.info("{}", result);
     }
 
     @Test
@@ -88,12 +90,22 @@ public class UserControllerTest {
         // 获取未来时间
         Date date = new Date(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         String content = "{\"id\":\"1\", \"username\":\"tom\",\"password\":null,\"birthday\":"+date.getTime()+"}";
-        String reuslt = mockMvc.perform(put("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8)
+        String result = mockMvc.perform(put("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(content))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andReturn().getResponse().getContentAsString();
 
-        log.info("{}", reuslt);
+        log.info("{}", result);
     }
+
+    @Test
+    public void whenUploadSuccess() throws Exception {
+        String result = mockMvc.perform(fileUpload("/file")
+                .file(new MockMultipartFile("file", "test.txt", "multipart/form-data", "hello upload".getBytes(StandardCharsets.UTF_8))))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        log.info("{}", result);
+    }
+
 }

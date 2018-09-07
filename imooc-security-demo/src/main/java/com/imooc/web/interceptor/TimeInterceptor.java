@@ -24,7 +24,6 @@ public class TimeInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        log.info("{}", "拦截器最后一定会调用：afterCompletion");
-        log.info("{}", "拦截器的局限在于不可以拿到方法参数的值");
+        log.info("{}", "拦截器最后一定会调用：afterCompletion，ps：拦截器的局限在于不可以拿到方法参数的值");
     }
 }
