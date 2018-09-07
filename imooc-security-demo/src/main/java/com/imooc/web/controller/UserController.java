@@ -35,7 +35,8 @@ public class UserController {
     @GetMapping(value = "/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable String id) {
-        log.info("进入Controller，获取用户详情");
+        log.info("进入Controller，获取用户详情，用户不存在异常会被异常处理器处理，不会传到拦截器，拦截器不仅会拦截用户定义的Controller也会拦截spring框架本身的Controller");
+        // throw new RuntimeException();
         throw new UserNotExistException(id);
     }
 
