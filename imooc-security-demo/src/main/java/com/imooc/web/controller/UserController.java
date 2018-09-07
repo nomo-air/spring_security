@@ -35,6 +35,7 @@ public class UserController {
     @GetMapping(value = "/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable String id) {
+        log.info("进入Controller，获取用户详情");
         throw new UserNotExistException(id);
     }
 
