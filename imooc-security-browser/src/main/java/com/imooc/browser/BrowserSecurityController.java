@@ -32,10 +32,6 @@ public class BrowserSecurityController {
 
     /**
      * 当需要身份认证时，跳转到这里
-     *
-     * @param request
-     * @param response
-     * @return
      */
     @GetMapping("/authentication/require")
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
