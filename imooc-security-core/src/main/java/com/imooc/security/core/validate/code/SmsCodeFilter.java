@@ -1,7 +1,6 @@
 package com.imooc.security.core.validate.code;
 
 import com.imooc.security.core.properties.SecurityProperties;
-import com.imooc.security.core.validate.code.image.ImageCode;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -24,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean { // 初始化bean后执行的方法
+public class SmsCodeFilter extends OncePerRequestFilter implements InitializingBean { // 初始化bean后执行的方法
 
     @Setter
     private AuthenticationFailureHandler authenticationFailureHandler;
@@ -41,11 +40,11 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        String[] configUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getImage().getUrl(), ",");
+        String[] configUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getSms().getUrl(), ",");
         if (configUrls != null) {
             Collections.addAll(urls, configUrls);
         }
-        urls.add("/authentication/form");
+        urls.add("/authentication/mobile");
     }
 
     @Override
@@ -72,9 +71,9 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {
 
         ValidateCode codeInSession = (ValidateCode) sessionStrategy.getAttribute(request,
-                ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+                ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
 
-        String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
+        String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "smsCode");
 
         if (StringUtils.isBlank(codeInRequest)) {
             throw new ValidateCodeException("验证码的值不能为空");
@@ -85,13 +84,13 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         }
 
         if (codeInSession.isExpried()) {
-            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
             throw new ValidateCodeException("验证码已过期");
         }
 
         if (!StringUtils.equals(codeInSession.getCode(), codeInRequest)) {
             throw new ValidateCodeException("验证码不匹配");
         }
-        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
     }
 }
