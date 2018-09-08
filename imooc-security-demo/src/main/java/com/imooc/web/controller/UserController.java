@@ -9,6 +9,10 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +68,21 @@ public class UserController {
         }
         log.info("{}, {}, {}, {}", user.getId(), user.getUsername(), user.getPassword(), user.getBirthday());
         return user;
+    }
+
+    @GetMapping("/me2")
+    public Object getCurrentUser() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    @GetMapping("/me1")
+    public Object getCurrentUser(Authentication authentication) {
+        return authentication;
+    }
+
+    @GetMapping("/me")
+    public Object getCurrentUser(@AuthenticationPrincipal UserDetails authentication) {
+        return authentication;
     }
 
 }
